@@ -72,6 +72,7 @@ contract DmtpProxy is ERC1967Proxy {
         address admin_
     ) payable ERC1967Proxy(_logic, bytes("")) {
         _admin = admin_;
+        _owner = msg.sender;
         // Set the storage value and emit an event for ERC-1967 compatibility
         ERC1967Utils.changeAdmin(_proxyAdmin());
     }
@@ -85,7 +86,7 @@ contract DmtpProxy is ERC1967Proxy {
 
     function changeAdmin(address newAdmin) public {
         require(
-            _proxyAdmin() == msg.sender,
+            _owner == msg.sender,
             ERC1967Utils.ERC1967InvalidAdmin(msg.sender)
         );
         _admin = newAdmin;
@@ -94,6 +95,10 @@ contract DmtpProxy is ERC1967Proxy {
 
     function getAdmin() public view returns (address) {
         return _proxyAdmin();
+    }
+
+    function getOwner() public view returns (address) {
+        return _owner;
     }
 
     /**

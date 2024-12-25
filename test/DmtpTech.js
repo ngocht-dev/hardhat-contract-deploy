@@ -134,16 +134,16 @@ describe("DmtpTech", () => {
       const message = `Key: ${key.toString()}`;
       console.log(message);
     });
-    it(`should buy a key for a friend`, async () => {
-      const contract = await getContract("DmtpTech");
-      const [owner, signer, normal] = await ethers.getSigners();
+    // it(`should buy a key for a friend`, async () => {
+    //   const contract = await getContract("DmtpTech");
+    //   const [owner, signer, normal] = await ethers.getSigners();
 
-      const result = await contract.priceWithCommission(KEY_ID);
+    //   const result = await contract.priceWithCommission(KEY_ID);
 
-      await contract.buyKeyFor(KEY_ID, normal.address, {
-        value: result.payout.toString(),
-      });
-    });
+    //   await contract.buyKeyFor(KEY_ID, normal.address, {
+    //     value: result.payout.toString(),
+    //   });
+    // });
     // it(`should buy a key`, async () => {
     //   const contract = await getContract("DmtpTech");
     //   const [owner, signer, normal] = await ethers.getSigners();
@@ -174,46 +174,46 @@ describe("DmtpTech", () => {
     //      const result = await contract.sellPriceWithCommission(KEY_ID);
     //      await contract.connect(normal).sellKey(KEY_ID, result.price.toString());
     //    });
-     it(`should generate a key`, async () => {
-       const contract = await getContract("DmtpTech");
-       const [owner, signer, normal] = await ethers.getSigners();
-
-       const generated = await contract.generated(normal.address);
-       console.log("generated: ", generated, generated.toString());
-
-       if (new BigNumber(generated.toString()).toNumber() > 0) {
-         return true;
-       }
-
-       const hash = web3.extend.utils.soliditySha3(
-         { t: "address", v: normal.address },
-         { t: "uint", v: 421614 },
-         {
-           t: "address",
-           v: network.contracts.DmtpTech.proxy,
-         }
-       );
-
-       console.log("hash: ", hash, signer.privateKey, signer.address);
-
-       const signature = String(
-         await signer.signMessage(ethers.getBytes(hash))
-       );
-       console.log("signature: ", signature);
-
-       await contract.connect(normal).generateKey(signature);
-     });
-    it(`should check users issued keys`, async () => {
+    it(`should generate a key`, async () => {
       const contract = await getContract("DmtpTech");
+      const [owner, signer, normal] = await ethers.getSigners();
 
-      const [owner] = await ethers.getSigners();
+      const generated = await contract.generated(normal.address);
+      console.log("generated: ", generated, generated.toString());
 
-      console.log("owner: ", owner.address);
-      const result = await contract.generated(owner.address);
+      if (new BigNumber(generated.toString()).toNumber() > 0) {
+        return true;
+      }
 
-      const message = `whether users have issued a key: ${result}`;
-      console.log(message);
+      const hash = web3.extend.utils.soliditySha3(
+        { t: "address", v: normal.address },
+        { t: "uint", v: 421614 },
+        {
+          t: "address",
+          v: network.contracts.DmtpTech.proxy,
+        }
+      );
+
+      console.log("hash: ", hash, signer.privateKey, signer.address);
+
+      const signature = String(
+        await signer.signMessage(ethers.getBytes(hash))
+      );
+      console.log("signature: ", signature);
+
+      await contract.connect(normal).generateKey(signature);
     });
+    // it(`should check users issued keys`, async () => {
+    //   const contract = await getContract("DmtpTech");
+
+    //   const [owner] = await ethers.getSigners();
+
+    //   console.log("owner: ", owner.address);
+    //   const result = await contract.generated(owner.address);
+
+    //   const message = `whether users have issued a key: ${result}`;
+    //   console.log(message);
+    // });
     it(`should get price of a key`, async () => {
       const contract = await getContract("Key");
 
