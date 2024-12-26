@@ -93,6 +93,10 @@ contract DmtpProxy is ERC1967Proxy {
         ERC1967Utils.changeAdmin(newAdmin);
     }
 
+    function getProxyImplementation() public view returns (address) {
+        return ERC1967Utils.getImplementation();
+    }
+
     function getAdmin() public view returns (address) {
         return _proxyAdmin();
     }
